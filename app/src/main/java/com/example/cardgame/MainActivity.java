@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.example.cardgame.Card_Vars.Colors;
 import com.example.cardgame.Card_Vars.Type;
 import com.example.cardgame.Views.Card_View_Final;
+import com.example.cardgame.auxiliaryClasses.Card;
 import com.example.cardgame.auxiliaryClasses.forRetrofit.MyServer;
 import com.example.cardgame.auxiliaryClasses.forRetrofit.UniverseRequest;
 import com.example.cardgame.auxiliaryClasses.forRetrofit.UniverseResponse;
@@ -30,11 +31,20 @@ public class MainActivity extends AppCompatActivity {
 
     Retrofit retrofit;
     MyServer server;
+    Card_View_Final card;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        card = findViewById(R.id.temp_card);
+        card.changeCard(new Card("red", "default", 1, "red", "default", 1));
+        /*
+        Все возможные значения я записал в классе com.example.cardgame.auxiliaryClasses.Card
+        Сам View лежит в com.example.cardgame.Views.Card_View_Final
+        Так же подписал некоторые методы чтобы было проще разобраться
+        */
     }
 
     public void Connect(View v) {

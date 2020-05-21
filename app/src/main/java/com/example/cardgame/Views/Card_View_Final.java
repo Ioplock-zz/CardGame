@@ -34,7 +34,7 @@ public class Card_View_Final extends View {
     int height, width;
 
     // Card data
-    Paint text_color = new Paint();
+    Paint text_color = new Paint(); // Цвет которым будут нарисованы значки и цифры на картах
     public Card nowCard = new Card("red", "default", 1, "red", "default", 1);
 
     public Card_View_Final(Context context) {
@@ -55,6 +55,7 @@ public class Card_View_Final extends View {
         width = w;
     }
 
+    // Задаёт значение базовым переменным
     private void init() {
         initPaints();
         skip = new VectorMasterDrawable(context, R.drawable.skip).getFullPath();
@@ -62,6 +63,7 @@ public class Card_View_Final extends View {
         flip = new VectorMasterDrawable(context, R.drawable.change_direction).getFullPath();
     }
 
+    // Задаёт значения кистям
     private void initPaints(){
         text_color.setStyle(Paint.Style.FILL);
         text_color.setAntiAlias(true);
@@ -70,6 +72,7 @@ public class Card_View_Final extends View {
         text_color.setTextAlign(Paint.Align.CENTER);
     }
 
+    // Возможность поменять нарисованную на View карту
     public void changeCard(Card card) {
         initPaints();
         switch (card.getColorNow()) {
