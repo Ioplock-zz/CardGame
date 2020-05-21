@@ -1,13 +1,11 @@
 package com.example.cardgame.auxiliaryClasses;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.BaseAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,13 +49,15 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) { // TODO: Сделать чтобы можно было кинуть лишь одну карту
         View convertView = LayoutInflater.from(ctx).
                 inflate(R.layout.card_item_list, parent, false);
         convertView.setOnClickListener(v -> {
+            if(GameActivity.table.size() < 2 || ((Card_View_Final) v.findViewById(R.id.card)).nowCard.equals(GameActivity.table.get(0))) {
             GameActivity.cards.remove(((Card_View_Final) v.findViewById(R.id.card)).nowCard);
-            GameActivity.adapter = new CardsAdapter(cards, token, ctx);
-            list_cards.setAdapter(GameActivity.adapter);
+            GameActivity.adapter.notifyDataSetChanged();
+                GameActivity.waitForMove.hide();
+//            list_cards.setAdapter(GameActivity.adapter);
             Call<UniverseResponse> call = server.getRooms(UniverseRequest.ThrowCard(token, ((Card_View_Final) v.findViewById(R.id.card)).nowCard));
             call.enqueue(new Callback<UniverseResponse>() {
                 @Override
@@ -71,8 +71,13 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
                 @Override
                 public void onFailure(Call<UniverseResponse> call, Throwable t) {
                     Log.d("DEBUG", Objects.requireNonNull(t.getMessage()));
+                    GameActivity.waitForMove.show();
                 }
             });
+        } else {
+                Toast.makeText(ctx, "Вы не можете кинуть эту карту", Toast.LENGTH_SHORT).show();
+                GameActivity.waitForMove.show();
+            }
         });
         return new ViewHolder(convertView);
     }

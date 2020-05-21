@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import androidx.annotation.Nullable;
 
@@ -27,7 +28,7 @@ public class Card_View_Final extends View {
     Path flip;
 
     // Colors constants
-    private final int BLUE_COLOR = Color.parseColor(getResources().getString(R.string.blue)), RED_COLOR = Color.parseColor(getResources().getString(R.string.red)), GREEN_COLOR = Color.parseColor(getResources().getString(R.string.green)), YELLOW_COLOR = Color.parseColor(getResources().getString(R.string.yellow));
+    private final int BLUE_COLOR = getResources().getColor(R.color.blue), RED_COLOR = getResources().getColor(R.color.red), GREEN_COLOR = getResources().getColor(R.color.green), YELLOW_COLOR = getResources().getColor(R.color.yellow);
 
     // Screen size
     int height, width;
@@ -64,6 +65,7 @@ public class Card_View_Final extends View {
     private void initPaints(){
         text_color.setStyle(Paint.Style.FILL);
         text_color.setAntiAlias(true);
+        text_color.setColor(RED_COLOR);
         text_color.setTextSize(height / 2f / 2f);
         text_color.setTextAlign(Paint.Align.CENTER);
     }
@@ -75,22 +77,22 @@ public class Card_View_Final extends View {
             case "red": background = getResources().getDrawable(R.drawable.card_red, null); text_color.setColor(RED_COLOR); break;
             case "green": background = getResources().getDrawable(R.drawable.card_green, null); text_color.setColor(GREEN_COLOR); break;
             case "yellow": background = getResources().getDrawable(R.drawable.card_yellow, null); text_color.setColor(YELLOW_COLOR); break;
-            case "multi": background = getResources().getDrawable(R.drawable.ic_launcher_background, null);
+            case "wild": background = getResources().getDrawable(R.drawable.ic_launcher_background, null);
         }
         nowCard = card;
         invalidate();
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
-        if(Card.flip) canvas.drawColor(Color.parseColor("#333333")); else canvas.drawColor(Color.WHITE);
+    protected void onDraw(Canvas canvas) { //TODO: Здесь не рисуется цифра при первой отрисовке
+        if(Card.flip) canvas.drawColor(Color.parseColor("#666666")); else canvas.drawColor(Color.WHITE);
         background.setBounds(0, 0, width, height);
         background.draw(canvas);
         switch (nowCard.getTypeNow()) {
             case "flip": canvas.drawPath(flip, text_color); break;
             case "skip": canvas.drawPath(skip, text_color); break;
             case "reverse": canvas.drawPath(change_direction, text_color); break;
-            case "default": canvas.drawText(nowCard.getNumberString(), width / 2f,height / 2f + height / 16f + height / 32f, text_color);
+            default: canvas.drawText(nowCard.getNumberString(), width / 2f,height / 2f + height / 16f + height / 32f, text_color);
         }
     }
 }

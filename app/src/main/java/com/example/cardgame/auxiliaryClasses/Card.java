@@ -38,9 +38,9 @@ public class Card {
 
     public boolean equals(Card card) {
         boolean result = false;
-        if(!flip && (this.f_number == card.f_number || this.f_color.equals(card.f_color) || this.f_color.equals("multi"))) {
+        if(!flip && (this.f_number == card.f_number || this.f_color.equals(card.f_color) || this.f_type.equals("wild"))) {
             result = true;
-        } else if(flip && (this.b_number == card.b_number || this.b_color.equals(card.b_color) || this.b_color.equals("multi"))) {
+        } else if(flip && (this.b_number == card.b_number || this.b_color.equals(card.b_color) || this.b_type.equals("wild"))) {
             result = true;
         }
         return result;
@@ -63,7 +63,7 @@ public class Card {
     }
 
     public String getNumberString() {
-        return getTypeNow().equals("wild") ? "+" + getNumberNow() : String.valueOf(getNumberNow());
+        return getTypeNow().equals("draw") ? "+" + getNumberNow() : String.valueOf(getNumberNow());
     }
 
     public boolean identical(Card card) {

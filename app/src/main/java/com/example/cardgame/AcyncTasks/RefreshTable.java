@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.cardgame.GameActivity;
+import com.example.cardgame.auxiliaryClasses.Card;
 import com.example.cardgame.auxiliaryClasses.forRetrofit.MyServer;
 import com.example.cardgame.auxiliaryClasses.forRetrofit.UniverseRequest;
 import com.example.cardgame.auxiliaryClasses.forRetrofit.UniverseResponse;
@@ -45,6 +46,29 @@ public class RefreshTable extends AsyncTask {
                         if (GameActivity.table != null && GameActivity.table.size() > 0 && response1.cards.size() > 0 && !response1.cards.get(0).identical(GameActivity.table.get(0))) {
                             Log.d("DEBUG", "Стол изменился");
                             // TODO: Сделать действия в зависимости от брошенной карты
+                            if(response1.cards.get(0).getTypeNow().equals("flip")) Card.flip = !Card.flip;
+
+                            Call<UniverseResponse> call1 = server.GetWhoMove(UniverseRequest.GetWhoMove(token));
+
+                            call1.enqueue(new Callback<UniverseResponse>() {
+                                @Override
+                                public void onResponse(Call<UniverseResponse> call, Response<UniverseResponse> response) { //TODO: Протестить и дописать
+                                    if(response.body() != null) {
+                                        if (response.body().token.equals(String.valueOf(token))) {
+                                            GameActivity.waitForMove.show();
+                                        } else {
+                                            GameActivity.waitForMove.hide();
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<UniverseResponse> call, Throwable t) {
+
+                                }
+                            });
+
+                            GameActivity.adapter.notifyDataSetChanged();
                         }
                         if (response1.cards != null)
                             GameActivity.table = new ArrayList<>(response1.cards);

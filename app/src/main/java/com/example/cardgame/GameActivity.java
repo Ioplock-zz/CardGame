@@ -1,6 +1,6 @@
 package com.example.cardgame;
 
-import android.content.DialogInterface;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,7 +8,6 @@ import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +15,7 @@ import com.example.cardgame.AcyncTasks.RefreshTable;
 import com.example.cardgame.Views.Card_View_Final;
 import com.example.cardgame.auxiliaryClasses.Card;
 import com.example.cardgame.auxiliaryClasses.CardsAdapter;
+import com.example.cardgame.auxiliaryClasses.WaitForMove;
 import com.example.cardgame.auxiliaryClasses.forRetrofit.MyServer;
 import com.example.cardgame.auxiliaryClasses.forRetrofit.UniverseRequest;
 import com.example.cardgame.auxiliaryClasses.forRetrofit.UniverseResponse;
@@ -33,8 +33,10 @@ public class GameActivity extends AppCompatActivity {
 
     public static ArrayList<Card> table = new ArrayList<>();
     public static ArrayList<Card> cards = new ArrayList<>();
+    public static WaitForMove waitForMove;
     Retrofit retrofit;
     MyServer server;
+    @SuppressLint("StaticFieldLeak")
     public static CardsAdapter adapter;
     String myNick;
     ArrayList<Card_View_Final> card_views = new ArrayList<>();
@@ -56,6 +58,7 @@ public class GameActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create()).build();
         server = retrofit.create(MyServer.class);
 
+        waitForMove = new WaitForMove(findViewById(R.id.wait1), findViewById(R.id.wait2));
         card_views.add(findViewById(R.id.card_forceGround));
         card_views.add(findViewById(R.id.card_backGround));
         list_cards = findViewById(R.id.cards);
@@ -85,7 +88,10 @@ public class GameActivity extends AppCompatActivity {
                 .setTitle("Выйти из игры?")
                 .setMessage("Вы действительно хотите выйти?\nЕсли вы покинете вы не сможете вернуться назад")
                 .setNegativeButton(android.R.string.no, null)
-                .setPositiveButton(android.R.string.yes, (arg0, arg1) -> GameActivity.super.onBackPressed()).create().show();
+                .setPositiveButton(android.R.string.yes, (arg0, arg1) -> {
+                    GameActivity.super.onBackPressed();
+                    adapter = null;
+                }).create().show();
     }
 
     public void takeCard(View view) {
@@ -95,10 +101,17 @@ public class GameActivity extends AppCompatActivity {
             public void onResponse(Call<UniverseResponse> call, Response<UniverseResponse> response) {
                 UniverseResponse response1 = response.body();
                 // TODO: Брать карту с сервера
+
                 cards.add(0, response1.card);
-                adapter = new CardsAdapter(cards, Integer.parseInt(token), getApplicationContext());
+
+                if(adapter == null) {
+                    adapter = new CardsAdapter(cards, Integer.parseInt(token), getApplicationContext());
+                    list_cards.setAdapter(adapter);
+                } else {
+                    adapter.notifyDataSetChanged();
+                }
                 Log.d("DEBUG", String.valueOf(response1.card));
-                list_cards.setAdapter(adapter);
+
                 /*LinearLayoutManager manager = new LinearLayoutManager(getApplicationContext());
                 manager.setOrientation(LinearLayoutManager.HORIZONTAL);*/
                 list_cards.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));

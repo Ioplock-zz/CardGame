@@ -54,4 +54,8 @@ public class UniverseRequest {
     public static UniverseRequest ThrowCard(int token, Card card) {
         return new UniverseRequest("throw_card", token, card);
     }
+
+    public static UniverseRequest GetWhoMove(int token) {
+        return new UniverseRequest("get_who_move", token);
+    }
 }

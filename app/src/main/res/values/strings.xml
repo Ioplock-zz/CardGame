@@ -1,7 +1,3 @@
 <resources>
     <string name="app_name">Card Game</string>
-    <string name="green">#42e695</string>
-    <string name="red">#f54ea2</string>
-    <string name="blue">#6078ea</string>
-    <string name="yellow">#ff9d27</string>
 </resources>

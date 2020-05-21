@@ -1,5 +1,6 @@
 package com.example.cardgame.Views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -10,6 +11,7 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+@Deprecated
 public class Card_View extends View {
 
     Paint second_color = new Paint();
@@ -155,7 +157,7 @@ public class Card_View extends View {
         initShapes();
         initPaints();
         canvas.drawRoundRect(Background_b, 20 , 20, second_color);
-        Paint second_color_stroke = new Paint(second_color);
+        @SuppressLint("DrawAllocation") Paint second_color_stroke = new Paint(second_color);
         second_color_stroke.setStyle(Paint.Style.STROKE);
         second_color_stroke.setStrokeWidth(20);
         if (Color_e.getColor() == Color.WHITE) {

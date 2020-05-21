@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import java.util.HashMap;
 
-public class Room { //TODO: Создать метод получения комнат на сервере
+public class Room {
 
     HashMap<String, String> players;
     private String id;
