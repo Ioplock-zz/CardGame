@@ -91,7 +91,7 @@ public class Card_View_Final extends View {
         if(Card.flip) canvas.drawColor(Color.parseColor("#666666")); else canvas.drawColor(Color.WHITE);
         background.setBounds(0, 0, width, height);
         background.draw(canvas);
-        switch (nowCard.getTypeNow()) {
+        switch (nowCard.getTypeNow()) { // Не обращайте внимания что значки рисуються не на своих местах, так же для wild карты пока нет фона
             case "flip": canvas.drawPath(flip, text_color); break;
             case "skip": canvas.drawPath(skip, text_color); break;
             case "reverse": canvas.drawPath(change_direction, text_color); break;
