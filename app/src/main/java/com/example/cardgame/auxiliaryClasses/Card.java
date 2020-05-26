@@ -33,13 +33,10 @@ public class Card {
 
     // Проверяет возможно ли бросить карту на другую карту
     public boolean equals(Card card) {
-        boolean result = false;
-        if(!flip && (this.f_number == card.f_number || this.f_color.equals(card.f_color) || this.f_type.equals("wild"))) {
-            result = true;
-        } else if(flip && (this.b_number == card.b_number || this.b_color.equals(card.b_color) || this.b_type.equals("wild"))) {
-            result = true;
+        if(flip) {
+            return card.b_color.equals(this.b_color) || this.b_color.equals("wild") || card.b_color.equals("wild") || card.b_number == this.b_number;
         }
-        return result;
+        return card.f_color.equals(this.f_color) || this.f_color.equals("wild") || card.f_color.equals("wild") || card.f_number == this.f_number;
     }
 
     @Override

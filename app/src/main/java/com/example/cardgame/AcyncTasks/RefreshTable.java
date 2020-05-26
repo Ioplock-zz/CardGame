@@ -1,8 +1,11 @@
 package com.example.cardgame.AcyncTasks;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 
 import com.example.cardgame.GameActivity;
 import com.example.cardgame.auxiliaryClasses.Card;
@@ -27,6 +30,7 @@ public class RefreshTable extends AsyncTask {
     @SuppressLint("StaticFieldLeak")
     private GameActivity activity;
 
+    @SuppressLint("WrongThread")
     @Override
     protected Void doInBackground(Object[] objects) {
         Retrofit retrofit = new Retrofit.Builder()
@@ -35,6 +39,30 @@ public class RefreshTable extends AsyncTask {
 
         MyServer server = retrofit.create(MyServer.class);
         do {
+            if(Integer.parseInt(GameActivity.score.getText().toString()) >= 500) {
+                Call<UniverseResponse> call3 = server.fetchCards(UniverseRequest.EndGame(token));
+
+                call3.enqueue(new Callback<UniverseResponse>() {
+                    @Override
+                    public void onResponse(Call<UniverseResponse> call, Response<UniverseResponse> response) {
+                        if(response.body() != null) {
+                            AlertDialog dialog = new AlertDialog.Builder(activity).setMessage("Ты выйграл, поздравляю!").setTitle("Ты выиграл!").setPositiveButton("Ура", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    activity.onBackPressed(true);
+                                }
+                            }).create();
+                            dialog.show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UniverseResponse> call, Throwable t) {
+
+                    }
+                });
+                return null;
+            }
             if(running) return null;
             Call<UniverseResponse> call = server.fetchCards(UniverseRequest.FetchCards(token));
 
@@ -46,18 +74,34 @@ public class RefreshTable extends AsyncTask {
                         if (GameActivity.table != null && GameActivity.table.size() > 0 && response1.cards.size() > 0 && !response1.cards.get(0).identical(GameActivity.table.get(0))) {
                             Log.d("DEBUG", "Стол изменился");
                             // TODO: Сделать действия в зависимости от брошенной карты
-                            if(response1.cards.get(0).getTypeNow().equals("flip")) Card.flip = !Card.flip;
+                            GameActivity.waitForMove.show();
+                            if(response1.cards.get(0).getTypeNow().equals("end")) {
+                                AlertDialog dialog = new AlertDialog.Builder(activity).setMessage("Ты проиграл, но нечего повезёт в слейдущий раз").setTitle("Ты проиграл").setPositiveButton("Ок", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        activity.onBackPressed(true);
+                                    }
+                                }).create();
+                                dialog.show();
+                            }
 
-                            Call<UniverseResponse> call1 = server.GetWhoMove(UniverseRequest.GetWhoMove(token));
+                            if(response1.cards.get(0).getTypeNow().equals("flip")) {
+                                Card.flip = !Card.flip;
+                                GameActivity.adapter.notifyDataSetChanged();
+                            }
+
+                            Call<UniverseResponse> call1 = server.getWhoMove(UniverseRequest.GetWhoMove(token));
 
                             call1.enqueue(new Callback<UniverseResponse>() {
                                 @Override
                                 public void onResponse(Call<UniverseResponse> call, Response<UniverseResponse> response) { //TODO: Протестить и дописать
                                     if(response.body() != null) {
                                         if (response.body().token.equals(String.valueOf(token))) {
-                                            GameActivity.waitForMove.show();
-                                        } else {
                                             GameActivity.waitForMove.hide();
+                                        } else if(response.body().token.equals("-1") && response.body().vip && !response.body().isStarted) {
+                                            GameActivity.startButton.setVisibility(View.VISIBLE);
+                                        } else {
+                                            GameActivity.waitForMove.show();
                                         }
                                     }
                                 }
@@ -67,8 +111,6 @@ public class RefreshTable extends AsyncTask {
 
                                 }
                             });
-
-                            GameActivity.adapter.notifyDataSetChanged();
                         }
                         if (response1.cards != null)
                             GameActivity.table = new ArrayList<>(response1.cards);

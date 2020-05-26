@@ -1,5 +1,6 @@
 package com.example.cardgame.auxiliaryClasses;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,7 +28,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.example.cardgame.GameActivity.API_URL;
-import static com.example.cardgame.GameActivity.list_cards;
 
 public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> {
 
@@ -53,30 +53,31 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
         View convertView = LayoutInflater.from(ctx).
                 inflate(R.layout.card_item_list, parent, false);
         convertView.setOnClickListener(v -> {
-            if(GameActivity.table.size() < 2 || ((Card_View_Final) v.findViewById(R.id.card)).nowCard.equals(GameActivity.table.get(0))) {
-            GameActivity.cards.remove(((Card_View_Final) v.findViewById(R.id.card)).nowCard);
-            GameActivity.adapter.notifyDataSetChanged();
-                GameActivity.waitForMove.hide();
-//            list_cards.setAdapter(GameActivity.adapter);
-            Call<UniverseResponse> call = server.getRooms(UniverseRequest.ThrowCard(token, ((Card_View_Final) v.findViewById(R.id.card)).nowCard));
-            call.enqueue(new Callback<UniverseResponse>() {
+            if(!WaitForMove.isEnabled) return;
+            if(((Card_View_Final) v.findViewById(R.id.card)).nowCard.equals(GameActivity.table.get(0))) {
+                GameActivity.waitForMove.show();
+//              list_cards.setAdapter(GameActivity.adapter);
+                @SuppressLint("CutPasteId") Call<UniverseResponse> call = server.throwCard(UniverseRequest.ThrowCard(token, ((Card_View_Final) v.findViewById(R.id.card)).nowCard));
+                call.enqueue(new Callback<UniverseResponse>() {
                 @Override
                 public void onResponse(Call<UniverseResponse> call, Response<UniverseResponse> response) {
-                    UniverseResponse response1 = response.body();
-                    if(response1 != null && response1.rooms != null ) {
-                        Log.d("DEBUG", response1.status);
-                    }
+                        @SuppressLint("CutPasteId") int index = GameActivity.cards.indexOf(((Card_View_Final) v.findViewById(R.id.card)).nowCard);
+                        GameActivity.cards.remove(index);
+                        GameActivity.adapter.notifyItemRemoved(index);
+                        if(response.body() != null) {
+                            GameActivity.score.setText(String.valueOf(response.body().score));
+                        }
                 }
 
                 @Override
                 public void onFailure(Call<UniverseResponse> call, Throwable t) {
                     Log.d("DEBUG", Objects.requireNonNull(t.getMessage()));
-                    GameActivity.waitForMove.show();
+                    GameActivity.waitForMove.hide();
                 }
             });
         } else {
                 Toast.makeText(ctx, "Вы не можете кинуть эту карту", Toast.LENGTH_SHORT).show();
-                GameActivity.waitForMove.show();
+                GameActivity.waitForMove.hide();
             }
         });
         return new ViewHolder(convertView);

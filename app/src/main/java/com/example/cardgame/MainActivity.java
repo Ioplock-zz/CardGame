@@ -31,15 +31,15 @@ public class MainActivity extends AppCompatActivity {
 
     Retrofit retrofit;
     MyServer server;
-    Card_View_Final card;
+//    Card_View_Final card;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        card = findViewById(R.id.temp_card);
-        card.changeCard(new Card("red", "default", 1, "red", "default", 1));
+        /*card = findViewById(R.id.temp_card);
+        card.changeCard(new Card("red", "default", 1, "red", "default", 1));*/
         /*
         Все возможные значения я записал в классе com.example.cardgame.auxiliaryClasses.Card
         Сам View лежит в com.example.cardgame.Views.Card_View_Final
@@ -60,13 +60,13 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create()).build();
         server = retrofit.create(MyServer.class);
 
-        Call<UniverseResponse> call = server.getRooms(UniverseRequest.RegRoom());
+        Call<UniverseResponse> call = server.regRoom(UniverseRequest.RegRoom());
         call.enqueue(new Callback<UniverseResponse>() {
             @Override
             public void onResponse(Call<UniverseResponse> call, Response<UniverseResponse> response) {
                 if(response.body() != null && !response.body().room.equals("")) {
                     UniverseResponse response1 = response.body();
-                    Call<UniverseResponse> call1 = server.getRooms(UniverseRequest.Register("Vip", response1.room));
+                    Call<UniverseResponse> call1 = server.register(UniverseRequest.Register("Vip", response1.room));
 
                     call1.enqueue(new Callback<UniverseResponse>() {
                         @Override

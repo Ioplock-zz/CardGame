@@ -12,5 +12,13 @@ public interface MyServer {
     @POST("/")
     Call<UniverseResponse> getRooms(@Body UniverseRequest getRooms);
     @POST("/")
-    Call<UniverseResponse> GetWhoMove(@Body UniverseRequest getWhoMove);
+    Call<UniverseResponse> throwCard(@Body UniverseRequest getRooms);
+    @POST("/")
+    Call<UniverseResponse> getWhoMove(@Body UniverseRequest getWhoMove);
+    @POST("/")
+    Call<UniverseResponse> getVip(@Body UniverseRequest getVip);
+    @POST("/")
+    Call<UniverseResponse> startGame(@Body UniverseRequest start);
+    @POST("/")
+    Call<UniverseResponse> regRoom(@Body UniverseRequest regRoom);
 }

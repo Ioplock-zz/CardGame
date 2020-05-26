@@ -58,4 +58,16 @@ public class UniverseRequest {
     public static UniverseRequest GetWhoMove(int token) {
         return new UniverseRequest("get_who_move", token);
     }
+
+    public static UniverseRequest GetVip(int token) {
+        return new UniverseRequest("get_vip", token);
+    }
+
+    public static UniverseRequest StartGame(int token) {
+        return new UniverseRequest("start", token);
+    }
+
+    public static UniverseRequest EndGame(int token) {
+        return new UniverseRequest("win", token);
+    }
 }
