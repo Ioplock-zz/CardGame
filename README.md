@@ -13,4 +13,12 @@
 [license-shield]: https://img.shields.io/badge/License-Apache%202.0-lightgrey.svg
 [migration-shield]: https://img.shields.io/badge/Wiki-Migrating%20from%20V3-green.svg
 
+[ ![version][] ][download]
+[ ![jenkins-shield][] ][jenkins]
+[ ![license-shield][] ][license]
+[ ![discord-shield][] ][discord-invite]
+[ ![faq-shield] ][faq]
+[ ![troubleshooting-shield] ][troubleshooting]
+[ ![migration-shield][] ][migration]
+
 # CardGame
