@@ -14,10 +14,10 @@
                 android:endY="248.53"
                 android:tileMode="clamp">
                 <item
-                    android:color="#6078EA"
+                    android:color="@color/gradBlueD"
                     android:offset="0" />
                 <item
-                    android:color="#17AED9"
+                    android:color="@color/gradBlueL"
                     android:offset="1" />
             </gradient>
         </aapt:attr>
@@ -33,10 +33,10 @@
                 android:endY="207.11"
                 android:tileMode="clamp">
                 <item
-                    android:color="#6078EA"
+                    android:color="@color/gradBlueD"
                     android:offset="0" />
                 <item
-                    android:color="#17AED9"
+                    android:color="@color/gradBlueL"
                     android:offset="1" />
             </gradient>
         </aapt:attr>
@@ -52,10 +52,10 @@
                 android:endY="305.99"
                 android:tileMode="clamp">
                 <item
-                    android:color="#6078EA"
+                    android:color="@color/gradBlueD"
                     android:offset="0" />
                 <item
-                    android:color="#17AED9"
+                    android:color="@color/gradBlueL"
                     android:offset="1" />
             </gradient>
         </aapt:attr>
@@ -71,10 +71,10 @@
                 android:endY="83.78"
                 android:tileMode="clamp">
                 <item
-                    android:color="#6078EA"
+                    android:color="@color/gradBlueD"
                     android:offset="0" />
                 <item
-                    android:color="#17AED9"
+                    android:color="@color/gradBlueL"
                     android:offset="1" />
             </gradient>
         </aapt:attr>
@@ -90,10 +90,10 @@
                 android:endY="646.32"
                 android:tileMode="clamp">
                 <item
-                    android:color="#6078EA"
+                    android:color="@color/gradBlueD"
                     android:offset="0" />
                 <item
-                    android:color="#17AED9"
+                    android:color="@color/gradBlueL"
                     android:offset="1" />
             </gradient>
         </aapt:attr>
@@ -109,10 +109,10 @@
                 android:endY="673.96"
                 android:tileMode="clamp">
                 <item
-                    android:color="#6078EA"
+                    android:color="@color/gradBlueD"
                     android:offset="0" />
                 <item
-                    android:color="#17AED9"
+                    android:color="@color/gradBlueL"
                     android:offset="1" />
             </gradient>
         </aapt:attr>
@@ -128,10 +128,10 @@
                 android:endY="771.03"
                 android:tileMode="clamp">
                 <item
-                    android:color="#6078EA"
+                    android:color="@color/gradBlueD"
                     android:offset="0" />
                 <item
-                    android:color="#17AED9"
+                    android:color="@color/gradBlueL"
                     android:offset="1" />
             </gradient>
         </aapt:attr>
@@ -147,10 +147,10 @@
                 android:endY="657.08"
                 android:tileMode="clamp">
                 <item
-                    android:color="#6078EA"
+                    android:color="@color/gradBlueD"
                     android:offset="0" />
                 <item
-                    android:color="#17AED9"
+                    android:color="@color/gradBlueL"
                     android:offset="1" />
             </gradient>
         </aapt:attr>
@@ -178,10 +178,10 @@
                 android:endY="532.42"
                 android:tileMode="clamp">
                 <item
-                    android:color="#6078EA"
+                    android:color="@color/gradBlueD"
                     android:offset="0" />
                 <item
-                    android:color="#17AED9"
+                    android:color="@color/gradBlueL"
                     android:offset="1" />
             </gradient>
         </aapt:attr>

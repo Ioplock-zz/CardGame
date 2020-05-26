@@ -8,4 +8,13 @@
     <color name="red">#f54ea2</color>
     <color name="blue">#6078ea</color>
     <color name="yellow">#ff9d27</color>
+
+    <color name="gradGreenL">#42E695</color>
+    <color name="gradGreenD">#3BB2B8</color>
+    <color name="gradRedL">#FF7676</color>
+    <color name="gradRedD">#F54EA2</color>
+    <color name="gradBlueL">#17AED9</color>
+    <color name="gradBlueD">#6078EA</color>
+    <color name="gradYellowL">#FFE53B</color>
+    <color name="gradYellowD">#FF6D25</color>
 </resources>

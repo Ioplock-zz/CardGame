@@ -12,7 +12,7 @@
         android:id="@+id/nickname"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="7"
+        android:layout_weight="8"
         android:hint="Ваш ник" />
 
     <ListView
@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/nickname"
-        android:layout_weight="1">
+        android:layout_weight="1.5">
 
     </ListView>
 
@@ -28,7 +28,7 @@
         android:id="@+id/refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="7"
+        android:layout_weight="8"
         android:onClick="RefreshRooms"
         android:text="Обновить список" />
 </LinearLayout>
