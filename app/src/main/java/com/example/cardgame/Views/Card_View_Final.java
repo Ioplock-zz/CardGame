@@ -13,6 +13,8 @@ import android.graphics.Path;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 
 import com.example.cardgame.auxiliaryClasses.Card;
@@ -37,7 +39,7 @@ public class Card_View_Final extends View {
 
     // Card data
     Paint text_color = new Paint(); // Цвет которым будут нарисованы значки и цифры на картах
-    public Card nowCard = new Card("wild", "default", 777, "wild", "default", 777);
+    public Card nowCard = new Card("wild", "default", 1, "wild", "default", 1, 999);
 
     public Card_View_Final(Context context) {
         super(context);
@@ -62,7 +64,7 @@ public class Card_View_Final extends View {
             Matrix scale = new Matrix();
             scale.setScale(height/1197.5f, height/1197.5f);
             Matrix offset = new Matrix();
-            offset.setTranslate(width*((height/1197.5f)*2.5f), height/3.2f);
+            offset.setTranslate(width/6f, height/3.2f);
 
             skip = new VectorMasterDrawable(context, R.drawable.skip);
             skip.setHotspotBounds(0, 0, width, height);
@@ -122,7 +124,7 @@ public class Card_View_Final extends View {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) { //TODO: Здесь не рисуется цифра при первой отрисовке
+    protected void onDraw(Canvas canvas) {
         init();
         if(Card.flip) canvas.drawColor(Color.parseColor("#666666")); else canvas.drawColor(Color.WHITE);
         background.setBounds(0, 0, width, height);

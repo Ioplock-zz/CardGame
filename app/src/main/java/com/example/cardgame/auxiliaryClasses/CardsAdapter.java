@@ -49,21 +49,24 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) { // TODO: Сделать чтобы можно было кинуть лишь одну карту
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View convertView = LayoutInflater.from(ctx).
                 inflate(R.layout.card_item_list, parent, false);
         convertView.setOnClickListener(v -> {
             if(!WaitForMove.isEnabled) return;
             if(((Card_View_Final) v.findViewById(R.id.card)).nowCard.equals(GameActivity.table.get(0))) {
                 GameActivity.waitForMove.show();
-//              list_cards.setAdapter(GameActivity.adapter);
                 @SuppressLint("CutPasteId") Call<UniverseResponse> call = server.throwCard(UniverseRequest.ThrowCard(token, ((Card_View_Final) v.findViewById(R.id.card)).nowCard));
                 call.enqueue(new Callback<UniverseResponse>() {
                 @Override
                 public void onResponse(Call<UniverseResponse> call, Response<UniverseResponse> response) {
                         @SuppressLint("CutPasteId") int index = GameActivity.cards.indexOf(((Card_View_Final) v.findViewById(R.id.card)).nowCard);
-                        GameActivity.cards.remove(index);
-                        GameActivity.adapter.notifyItemRemoved(index);
+                        if(index == -1) {
+                            GameActivity.adapter.notifyDataSetChanged();
+                        } else {
+                            GameActivity.cards.remove(index);
+                            GameActivity.adapter.notifyItemRemoved(index);
+                        }
                         if(response.body() != null) {
                             GameActivity.score.setText(String.valueOf(response.body().score));
                         }

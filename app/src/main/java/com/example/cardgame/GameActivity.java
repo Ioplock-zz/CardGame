@@ -62,6 +62,7 @@ public class GameActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         cards = new ArrayList<>();
+        Card.flip = false;
         token = intent.getStringExtra("token");
         myNick = intent.getStringExtra("nickname");
 
@@ -152,7 +153,6 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<UniverseResponse> call, Response<UniverseResponse> response) {
                 UniverseResponse response1 = response.body();
-                // TODO: Брать карту с сервера
 
                 cards.add(0, response1.card);
 
@@ -161,7 +161,7 @@ public class GameActivity extends AppCompatActivity {
                     list_cards.setAdapter(new SlideInBottomAnimationAdapter(adapter));
                     list_cards.setItemAnimator(new SlideInUpAnimator());
                 } else {
-                    adapter.notifyItemInserted(3);
+                adapter.notifyItemInserted(3);
                 }
                 Log.d("DEBUG", String.valueOf(response1.card));
 

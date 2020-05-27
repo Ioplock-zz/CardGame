@@ -11,14 +11,16 @@ public class Card {
     private String b_type;
     private int f_number; // И любая цифра от 1 до 9
     private int b_number;
+    public int hash; // Для определения идентичности (Иногда возникала ситуация в которой карты по значения были одинаковы, и из-за механики игры она не продолжалась)
 
-    public Card(String f_color, String f_type, int f_number, String b_color, String b_type, int b_number) {
+    public Card(String f_color, String f_type, int f_number, String b_color, String b_type, int b_number, int hash) {
         this.f_color = f_color;
         this.f_type = f_type;
         this.b_color = b_color;
         this.b_type = b_type;
         this.f_number = f_number;
         this.b_number = b_number;
+        this.hash = hash;
     }
 
     // Даёт значение в зависимости от того перевёрнуты ли карты
@@ -62,12 +64,7 @@ public class Card {
 
     // Проверяет идентичность карты другой карте
     public boolean identical(Card card) {
-        return this.f_color.equals(card.f_color) &&
-                this.b_color.equals(card.b_color) &&
-                this.f_type.equals(card.f_type) &&
-                this.b_type.equals(card.b_type) &&
-                this.f_number == card.f_number &&
-                this.b_number == card.b_number;
+        return this.hash == card.hash;
     }
 }
 

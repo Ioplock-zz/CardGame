@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.example.cardgame.GameActivity;
 import com.example.cardgame.auxiliaryClasses.Card;
+import com.example.cardgame.auxiliaryClasses.CardsAdapter;
 import com.example.cardgame.auxiliaryClasses.forRetrofit.MyServer;
 import com.example.cardgame.auxiliaryClasses.forRetrofit.UniverseRequest;
 import com.example.cardgame.auxiliaryClasses.forRetrofit.UniverseResponse;
@@ -16,6 +17,8 @@ import com.example.cardgame.auxiliaryClasses.forRetrofit.UniverseResponse;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter;
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,10 +49,10 @@ public class RefreshTable extends AsyncTask {
                     @Override
                     public void onResponse(Call<UniverseResponse> call, Response<UniverseResponse> response) {
                         if(response.body() != null) {
+                            activity.onBackPressed(true);
                             AlertDialog dialog = new AlertDialog.Builder(activity).setMessage("Ты выйграл, поздравляю!").setTitle("Ты выиграл!").setPositiveButton("Ура", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    activity.onBackPressed(true);
                                 }
                             }).create();
                             dialog.show();
@@ -73,13 +76,12 @@ public class RefreshTable extends AsyncTask {
                     if(response1 != null) {
                         if (GameActivity.table != null && GameActivity.table.size() > 0 && response1.cards.size() > 0 && !response1.cards.get(0).identical(GameActivity.table.get(0))) {
                             Log.d("DEBUG", "Стол изменился");
-                            // TODO: Сделать действия в зависимости от брошенной карты
                             GameActivity.waitForMove.show();
                             if(response1.cards.get(0).getTypeNow().equals("end")) {
+                                activity.onBackPressed(true);
                                 AlertDialog dialog = new AlertDialog.Builder(activity).setMessage("Ты проиграл, но нечего повезёт в слейдущий раз").setTitle("Ты проиграл").setPositiveButton("Ок", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        activity.onBackPressed(true);
                                     }
                                 }).create();
                                 dialog.show();
@@ -87,17 +89,25 @@ public class RefreshTable extends AsyncTask {
 
                             if(response1.cards.get(0).getTypeNow().equals("flip")) {
                                 Card.flip = !Card.flip;
-                                GameActivity.adapter.notifyDataSetChanged();
+                                if(GameActivity.adapter != null) GameActivity.adapter.notifyDataSetChanged();
                             }
 
                             Call<UniverseResponse> call1 = server.getWhoMove(UniverseRequest.GetWhoMove(token));
 
                             call1.enqueue(new Callback<UniverseResponse>() {
                                 @Override
-                                public void onResponse(Call<UniverseResponse> call, Response<UniverseResponse> response) { //TODO: Протестить и дописать
+                                public void onResponse(Call<UniverseResponse> call, Response<UniverseResponse> response) {
                                     if(response.body() != null) {
                                         if (response.body().token.equals(String.valueOf(token))) {
                                             GameActivity.waitForMove.hide();
+                                            if(response.body().cards != null) {
+                                                GameActivity.cards.addAll(response.body().cards);
+                                                if(GameActivity.adapter == null) {
+                                                    GameActivity.adapter = new CardsAdapter(GameActivity.cards, token, activity.getApplicationContext());
+                                                    GameActivity.list_cards.setAdapter(new SlideInBottomAnimationAdapter(GameActivity.adapter));
+                                                    GameActivity.list_cards.setItemAnimator(new SlideInUpAnimator());
+                                                } else GameActivity.adapter.notifyItemRangeInserted(0, response.body().cards.size());
+                                            }
                                         } else if(response.body().token.equals("-1") && response.body().vip && !response.body().isStarted) {
                                             GameActivity.startButton.setVisibility(View.VISIBLE);
                                         } else {
@@ -114,7 +124,6 @@ public class RefreshTable extends AsyncTask {
                         }
                         if (response1.cards != null)
                             GameActivity.table = new ArrayList<>(response1.cards);
-                        //Log.d("DEBUG", String.valueOf(response1.cards));
                         activity.refresh();
                     }
                 }
