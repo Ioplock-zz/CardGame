@@ -53,7 +53,7 @@ public class GameActivity extends AppCompatActivity {
     ArrayList<Card_View_Final> card_views = new ArrayList<>();
     public static RecyclerView list_cards;
     String token;
-    public static final String API_URL = "http://192.168.0.252:8050/"; // TODO: Наконец закинуть сервер на сервер и установить правильную константу
+    public static final String API_URL = "http://194.176.114.21:8067/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
